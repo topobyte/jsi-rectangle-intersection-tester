@@ -18,10 +18,14 @@ repositories {
     maven {
         url 'http://mvn.topobyte.de'
     }
+    maven {
+        url 'http://mvn.slimjars.com'
+    }
     mavenCentral()
 }
 
 dependencies {
+    compile 'de.topobyte:jsi:1.2.0'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
