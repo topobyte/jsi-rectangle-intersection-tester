@@ -19,6 +19,8 @@ package de.topobyte.jsi.intersectiontester;
 
 import com.infomatiq.jsi.Rectangle;
 import com.infomatiq.jsi.rtree.RTree;
+import com.infomatiq.jsi.rtree.Traversal;
+import com.infomatiq.jsi.rtree.TreeTraverser;
 import com.slimjars.dist.gnu.trove.procedure.TIntProcedure;
 
 /**
@@ -31,7 +33,61 @@ public class RTreeIntersectionTester implements RectangleIntersectionTester
 {
 
 	int counter = 1;
-	RTree tree = new RTree(1, 10);
+	RTree tree;
+
+	/**
+	 * Create an intersection tester with an internal {@link RTree} that is
+	 * created using the {@link RTree#RTree(int, int)} constructor with
+	 * arguments 1 and 10 for min and max nodes.
+	 */
+	public RTreeIntersectionTester()
+	{
+		this(1, 10);
+	}
+
+	/**
+	 * Create an intersection tester with an internal {@link RTree} that is
+	 * created using the {@link RTree#RTree(int, int)} constructor with the
+	 * specified values for min and max nodes.
+	 */
+	public RTreeIntersectionTester(int minNodeEntries, int maxNodeEntries)
+	{
+		tree = new RTree(minNodeEntries, maxNodeEntries);
+	}
+
+	/**
+	 * Create an intersection tester using the the specified {@link RTree} for
+	 * storing the covered regions. This will traverse all entries stored in the
+	 * specified tree initially to determine the highest id already used.
+	 * 
+	 * @param tree
+	 *            the rectangle tree to store covered regions in
+	 */
+	public RTreeIntersectionTester(RTree tree)
+	{
+		this.tree = tree;
+
+		Traversal traversal = new Traversal() {
+
+			@Override
+			public void node(Rectangle rectangle)
+			{
+				// ignore
+			}
+
+			@Override
+			public void element(Rectangle rectangle, int nodeId)
+			{
+				if (nodeId >= counter) {
+					counter = nodeId + 1;
+				}
+			}
+
+		};
+
+		TreeTraverser traverser = new TreeTraverser(tree, traversal);
+		traverser.traverse();
+	}
 
 	@Override
 	public void add(Rectangle r, boolean clone)
@@ -57,6 +113,7 @@ public class RTreeIntersectionTester implements RectangleIntersectionTester
 				free = false;
 				return false;
 			}
+
 		});
 
 		return free;
