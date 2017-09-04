@@ -21,6 +21,12 @@ import com.infomatiq.jsi.Rectangle;
 import com.infomatiq.jsi.rtree.RTree;
 import com.slimjars.dist.gnu.trove.procedure.TIntProcedure;
 
+/**
+ * An implementation of {@link RectangleIntersectionTester} based on an
+ * {@link RTree}.
+ * 
+ * @author Sebastian Kuerten (sebastian@topobyte.de)
+ */
 public class RTreeIntersectionTester implements RectangleIntersectionTester
 {
 

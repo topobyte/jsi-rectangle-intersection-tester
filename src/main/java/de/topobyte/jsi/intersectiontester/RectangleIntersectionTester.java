@@ -19,11 +19,41 @@ package de.topobyte.jsi.intersectiontester;
 
 import com.infomatiq.jsi.Rectangle;
 
+/**
+ * A data structure that stores rectangular regions and can be queried with
+ * rectangles. Rectangular regions can be added via
+ * {@link #add(Rectangle, boolean)} and queries can be submitted with
+ * {@link #isFree(Rectangle)}. Currently the data structure does not support
+ * removal operations.
+ * 
+ * @author Sebastian Kuerten (sebastian@topobyte.de)
+ */
 public interface RectangleIntersectionTester
 {
 
+	/**
+	 * Mark the specified rectangle as covered. Subsequent calls to
+	 * {@link #isFree(Rectangle)} that intersect the specified rectangle will
+	 * return false.
+	 * 
+	 * @param rectangle
+	 *            the region to mark as covered
+	 * @param clone
+	 *            whether the argument can be stored or it should be cloned to a
+	 *            new object (depends on whether you're reusing the same object
+	 *            on your end)
+	 */
 	public void add(Rectangle rectangle, boolean clone);
 
+	/**
+	 * Query whether the specified region is free. A rectangle is free if it
+	 * does not intersect any of the rectangles added to this data structure
+	 * with {@link #add(Rectangle, boolean)} before.
+	 * 
+	 * @param rectangle
+	 *            the region to test for
+	 * @return whether the region does not intersect any rectangle added before.
+	 */
 	public boolean isFree(Rectangle rectangle);
 
 }
